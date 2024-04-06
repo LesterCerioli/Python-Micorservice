@@ -10,7 +10,7 @@ app = Flask(__name__)
 # Set up the OAuth 2.0 flow for YouTube API
 scopes = ["https://www.googleapis.com/auth/youtube.force-ssl"]
 
-def authenticate();
+def authenticate():
     
     # Specify the path to the credentials file obtained from Google Developer Console
     os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
@@ -36,4 +36,15 @@ def like_video(video_id):
             id=video_id,
             rationf="like"
         )
+        response = request.execute()
+        return jsonify({"success": True, "message": f"Video with ID {video_id} liked successfully."})
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)})
+    
+@app.route('/like_video/<video_id>', methods=['POST'])
+def like_video_route(video_id):
+    return like_video(video_id)
+
+if __name__ == "__main__":
+    app.run(debug=True)
 
